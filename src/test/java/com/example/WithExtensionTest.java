@@ -2,6 +2,7 @@ package com.example;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.webdriver.ChromeDriverFactory;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -27,7 +28,7 @@ class WithExtensionTest {
         ChromeOptions options = new ChromeOptions();
         options.addExtensions(new File(extPath));
 
-        Configuration.browser = "chrome";
+        Configuration.browser = CustomChromeDriverFactory.class.getName();
         Configuration.browserCapabilities = options;
 
         open("https://www.cryptopro.ru/sites/default/files/products/cades/demopage/main.html");
@@ -63,5 +64,12 @@ class WithExtensionTest {
 
         open("https://www.cryptopro.ru/sites/default/files/products/cades/demopage/main.html");
         $(byText("ЭЦП в браузере – попробуйте прямо сейчас!")).should(visible);
+    }
+}
+
+class CustomChromeDriverFactory extends ChromeDriverFactory {
+    @Override
+    protected String[] excludeSwitches() {
+        return new String[]{};
     }
 }
